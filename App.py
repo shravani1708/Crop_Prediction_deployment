@@ -91,4 +91,4 @@ def get_weather():
         return jsonify({'error': 'Weather data not available for the given city.'}), 404
 
 if __name__ == '__main__':
-    app.run(debug=True)
+    app.run(debug=False)
