@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Weather Information</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+</head>
+<body>
+    <div class="container mt-5">
+        <h1 class="text-center">Weather Information</h1>
+        <form id="weatherForm" class="mt-4">
+            <div class="form-group">
+                <label for="city">City:</label>
+                <input type="text" class="form-control" id="city" name="city" required>
+            </div>
+            <button type="submit" class="btn btn-primary">Get Weather</button>
+        </form>
+
+        <h2 class="mt-5">Weather Report:</h2>
+        <table class="table table-bordered mt-3" id="weatherResult" style="display:none;">
+            <thead>
+                <tr>
+                    <th>City</th>
+                    <th>Max Temperature (°C)</th>
+                    <th>Min Temperature (°C)</th>
+                    <th>Humidity (%)</th>
+                    <th>Wind Speed (m/s)</th>
+                    <th>Sunrise</th>
+                    <th>Sunset</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td id="resultCity"></td>
+                    <td id="resultMaxTemp"></td>
+                    <td id="resultMinTemp"></td>
+                    <td id="resultHumidity"></td>
+                    <td id="resultWindSpeed"></td>
+                    <td id="resultSunrise"></td>
+                    <td id="resultSunset"></td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <script>
+        $('#weatherForm').on('submit', function(event) {
+            event.preventDefault();
+
+            const formData = {
+                city: $('#city').val(),
+            };
+
+            $.ajax({
+                url: '/weather',
+                type: 'POST',
+                contentType: 'application/json',
+                data: JSON.stringify(formData),
+                success: function(response) {
+                    // Check if response has all the required fields
+                    if (response && response.city && response.maxTemp !== undefined) {
+                        $('#resultCity').text(response.city);
+                        $('#resultMaxTemp').text(response.maxTemp);
+                        $('#resultMinTemp').text(response.minTemp);
+                        $('#resultHumidity').text(response.humidity);
+                        $('#resultWindSpeed').text(response.windSpeed);
+                        $('#resultSunrise').text(response.sunriseTime);
+                        $('#resultSunset').text(response.sunsetTime);
+                        
+                        $('#weatherResult').show();
+                    } else {
+                        alert('Unexpected response format.');
+                    }
+                },
+                error: function(xhr) {
+                    $('#weatherResult').hide();
+                    if (xhr.responseJSON && xhr.responseJSON.error) {
+                        alert('Error: ' + xhr.responseJSON.error);
+                    } else {
+                        alert('Error: Unable to fetch weather data.');
+                    }
+                }
+            });
+        });
+    </script>
+
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>
