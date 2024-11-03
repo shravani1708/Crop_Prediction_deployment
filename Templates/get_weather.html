@@ -4,7 +4,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Weather Information</title>
-    <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 </head>
@@ -48,42 +47,45 @@
 
     <script>
         $('#weatherForm').on('submit', function(event) {
-            event.preventDefault(); // Prevent default form submission
+            event.preventDefault();
 
-            // Collect input data
             const formData = {
                 city: $('#city').val(),
             };
 
-            // Send POST request to the weather route
             $.ajax({
                 url: '/weather',
                 type: 'POST',
                 contentType: 'application/json',
                 data: JSON.stringify(formData),
                 success: function(response) {
-                    // Populate the table with weather data
-                    $('#resultCity').text(response.city);
-                    $('#resultMaxTemp').text(response.maxTemp);
-                    $('#resultMinTemp').text(response.minTemp);
-                    $('#resultHumidity').text(response.humidity);
-                    $('#resultWindSpeed').text(response.windSpeed);
-                    $('#resultSunrise').text(response.sunriseTime);
-                    $('#resultSunset').text(response.sunsetTime);
-                    
-                    // Show the weather result table
-                    $('#weatherResult').show();
+                    // Check if response has all the required fields
+                    if (response && response.city && response.maxTemp !== undefined) {
+                        $('#resultCity').text(response.city);
+                        $('#resultMaxTemp').text(response.maxTemp);
+                        $('#resultMinTemp').text(response.minTemp);
+                        $('#resultHumidity').text(response.humidity);
+                        $('#resultWindSpeed').text(response.windSpeed);
+                        $('#resultSunrise').text(response.sunriseTime);
+                        $('#resultSunset').text(response.sunsetTime);
+                        
+                        $('#weatherResult').show();
+                    } else {
+                        alert('Unexpected response format.');
+                    }
                 },
                 error: function(xhr) {
-                    $('#weatherResult').hide(); // Hide the table on error
-                    alert('Error: ' + xhr.responseJSON.error);
+                    $('#weatherResult').hide();
+                    if (xhr.responseJSON && xhr.responseJSON.error) {
+                        alert('Error: ' + xhr.responseJSON.error);
+                    } else {
+                        alert('Error: Unable to fetch weather data.');
+                    }
                 }
             });
         });
     </script>
 
-    <!-- Bootstrap JS and dependencies (optional) -->
-    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 </body>

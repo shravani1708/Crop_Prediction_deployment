@@ -15,10 +15,16 @@
         }
         h1 {
             color: #343a40;
+            margin-bottom: 30px;
         }
         .btn {
             width: 200px;
             margin: 10px;
+            transition: background-color 0.3s, transform 0.3s;
+        }
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
         }
     </style>
 </head>
@@ -31,14 +37,6 @@
             </div>
             <div class="col-md-4">
                 <a href="/get_weather" class="btn btn-info btn-lg">Weather Information</a>
-            </div>
-        </div>
-        <div class="row justify-content-center mt-4">
-            <div class="col-md-4">
-                <a href="/about" class="btn btn-warning btn-lg">About Us</a>
-            </div>
-            <div class="col-md-4">
-                <a href="/contact" class="btn btn-danger btn-lg">Contact Us</a>
             </div>
         </div>
     </div>
