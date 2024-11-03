@@ -2,9 +2,8 @@ from flask import Flask, render_template, request, jsonify
 import pickle
 import requests
 import pandas as pd
-from flask_cors import CORS
 from datetime import datetime
-
+from flask_cors import CORS
 # Initialize Flask app
 app = Flask(__name__)
 CORS(app)
